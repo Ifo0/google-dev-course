@@ -15,6 +15,28 @@ import commands
 """Copy Special exercise
 """
 
+def get_paths(dir):
+
+    filenames = os.listdir(dir)
+    f = ", ".join(filenames)
+    special_filenames = re.findall(r'\w*__\w*__.\w*', f)
+    paths = []
+    abs_path = []
+    for item in special_filenames:
+        paths.append(os.path.join(dir, item))
+    for path in paths:
+        abs_path.append(os.path.abspath(path))
+    return abs_path
+
+def copy_to(file_paths, to_dir):
+    if not os.path.exists(to_dir):
+        os.mkdir(destination)
+    for path in file_paths:
+        # fname = os.path.basename(path)
+        # shutil.copy(path, os.path.join(to_dir, fname))
+        shutil.copy(path, to_dir)
+
+
 # +++your code here+++
 # Write functions and modify main() to call them
 
@@ -36,20 +58,37 @@ def main():
   # The args array is left just containing the dirs.
   todir = ''
   if args[0] == '--todir':
-    todir = args[1]
-    del args[0:2]
+    to_dir = args[1]
+    file_paths = get_paths(args[-1])
+    copy_to(file_paths, to_dir)
+
+    # test = copy_to(file_paths, to_dir)
+    # print(test)
 
   tozip = ''
   if args[0] == '--tozip':
     tozip = args[1]
-    del args[0:2]
+    del args[0]
 
   if len(args) == 0:
     print "error: must specify one or more dirs"
     sys.exit(1)
 
+
+
   # +++your code here+++
   # Call your functions
-  
+
+
+
+    # if todir:
+    #     test = copy_to(file_paths, to_dir)
+    #     print(test)
+    # else:
+    #     print('\n')
+    #     print('\n'.join(files))
+    #     print('\n')
+
+
 if __name__ == "__main__":
   main()
