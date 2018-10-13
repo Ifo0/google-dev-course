@@ -36,6 +36,23 @@ def copy_to(file_paths, to_dir):
         # shutil.copy(path, os.path.join(to_dir, fname))
         shutil.copy(path, to_dir)
 
+def zip_to(file_paths, zipname):
+    cmd = 'zip -j ' + zipname + " " + " ".join(file_paths)
+    print("About to run %s, do you want to continue (y/n) ?" %(cmd))
+    user_input = raw_input()
+    if user_input == 'y':
+        (status, output) = commands.getstatusoutput(cmd)
+        if status:
+            sys.stderr.write(output)
+            sys.exit(status)
+        else:
+            return output
+    elif user_input == 'n':
+        sys.exit(0)
+    else:
+        print("Invalid argument provided. Available: y/n")
+
+
 
 # +++your code here+++
 # Write functions and modify main() to call them
@@ -68,7 +85,11 @@ def main():
   tozip = ''
   if args[0] == '--tozip':
     tozip = args[1]
-    del args[0]
+    file_paths = get_paths(args[-1])
+    print(args)
+    zip_to(file_paths, tozip)
+
+
 
   if len(args) == 0:
     print "error: must specify one or more dirs"
